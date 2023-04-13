@@ -25,6 +25,18 @@ async function getSpecificCar(req: Request, res: Response) {
   }
 }
 
+async function getSpecificCarWithLicense(req: Request, res: Response) {
+  const carPlate = req.params.licensePlate;
+  try {
+    const car = await carService.getCarWithPlate(carPlate);
+    res.send(car);
+  } catch (e) {
+    if (e.name === "NotFoundError") {
+      return res.sendStatus(httpStatus.NOT_FOUND);
+    }
+  }
+}
+
 async function createCar(req: Request, res: Response) {
   const { model, licensePlate, year, color } = req.body;
 
@@ -60,6 +72,7 @@ async function deleteCar(req: Request, res: Response) {
 const carController = {
   getAllCars,
   getSpecificCar,
+  getSpecificCarWithLicense,
   createCar,
   deleteCar
 }
